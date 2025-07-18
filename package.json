@@ -4,9 +4,13 @@
   "description": "a backend project",
   "license": "ISC",
   "author": "Vivek Sahane",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src.index"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }
+ 
