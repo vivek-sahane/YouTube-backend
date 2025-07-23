@@ -1,11 +1,13 @@
+
+//It handles async errors in Express routes i.e. 400,500,200 like that
+//So that no need to write try catch in controllers
+
 const asyncHandler = (requestHandler) => {
-    (req, res, next) => {
+    return (req, res, next) => {
         Promise.resolve(requestHandler(req, res, next))
         .catch((err) => next(err))
     }
 }
-
-
 
 export {asyncHandler}
 
