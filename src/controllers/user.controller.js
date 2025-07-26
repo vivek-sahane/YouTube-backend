@@ -21,14 +21,14 @@ const registerUser = asyncHandler( async(req, res) => {
 
     // 2.// Validation - not empty using ApiError.js from utils
     if(
-        [fullName, email, username, passoword].some((field)=>
+        [fullName, email, username, password].some((field)=>
         field?.trim() === "")
     ) {
         throw new ApiError(400, "All fields are required")
     }
 
     // User.model.js have all access to database which check if record present earlier or not in db
-    const existedUser = User.findOne({
+    const existedUser = await User.findOne({
         $or: [{username},  {email}]
     })
 
