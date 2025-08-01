@@ -5,7 +5,7 @@ const subscriptionSchema = new Schema({
         type: Schema.Types.ObjectId,        // one who is subscribing
         ref: "User"
     },
-    chaneel: {
+    channel: {
         type: Schema.Types.ObjectId,        // one to whom subscriber is subscribing
         ref: "User"
     }
@@ -13,4 +13,4 @@ const subscriptionSchema = new Schema({
 
 
 
-export const subscription = mongoose.model("subscription",subscriptionSchema)
+export const subscription = mongoose.model("Subscription",subscriptionSchema)
