@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from 'cloudinary';
-import fs from "fs"
+import fs from "fs"     // fs - file system
 
 
 
@@ -24,7 +24,7 @@ import fs from "fs"
             return response;
 
         } catch (error) {
-            fs.unlinkSync(localFilePath)  // remove the loclly saved temporary file as the upload opertion got failed
+            fs.unlinkSync(localFilePath)  // remove the locally saved temporary file as the upload opertion got failed
             return null;
         }
     }
