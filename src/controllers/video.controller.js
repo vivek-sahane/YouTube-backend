@@ -125,6 +125,84 @@ const publishAVideo = asyncHandler(async (req, res) => {
   );
 });
 
+const getVideoById = asyncHandler( async(req, res)=> {
+  const {videoId} = req.params
+
+  const video = await Video.findById(videoId)
+
+  if(!video) {
+    throw new ApiError(404, "Video doent exists");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, video, "Video fetch succeffuly"))
+});
+
+
+const updateVideo = asyncHandler(async (req, res) => {
+  const { videoId } = req.params;
+  const { title, description } = req.body || {};
+  const thumbnail = req.file?.path; // Assuming thumbnail comes as a file 
+  // thubmnail logic remain which includes middleware and numlter
+
+  if (!title && !description && !thumbnail) {
+    throw new ApiError(400, "No update data provided");
+  }
+
+  // Find the video by its MongoDB _id
+  const video = await Video.findById(videoId);
+  if (!video) {
+    throw new ApiError(404, "Video not found");
+  }
+
+  // Step 2: Prepare update object
+  const updateFields = {};
+
+  if (title) updateFields.title = title;
+  if (description) updateFields.description = description;
+
+  if (thumbnail) {
+    const thumbnailUpload = await uploadOnCloudinary(thumbnail);
+    if (!thumbnailUpload) {
+      throw new ApiError(400, "Error uploading thumbnail to Cloudinary");
+    }
+    updateFields.thumbnail = thumbnailUpload.url;
+  }
+
+  // Step 3: Update and return the new video document
+  const updatedVideo = await Video.findByIdAndUpdate(
+    videoId,
+    { $set: updateFields },
+    { new: true, runValidators: true }
+  );
+
+  return res.status(200).json(
+    new ApiResponse(200, updatedVideo, "Video details updated successfully")
+  );
+});
+
+
+
+const deleteVideo = asyncHandler(async (req, res) => {
+  const { videoId } = req.params;
+
+  if (!videoId) {
+    throw new ApiError(400, "VideoId not provided");
+  }
+
+  const video = await Video.findByIdAndDelete(videoId );
+
+  if (!video) {
+    throw new ApiError(404, "Video not found or already deleted");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, video, "Video deleted successfully"));
+});
+
+
 
 const togglePublishStatus = asyncHandler(async (req, res) => {
     const { videoId } = req.params
@@ -133,5 +211,8 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
 export {
     getAllVideos,
     publishAVideo,
+    getVideoById,
+    updateVideo,
+    deleteVideo,
     togglePublishStatus
 }

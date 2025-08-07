@@ -2,6 +2,9 @@ import { Router } from "express";
 import {
     getAllVideos,
     publishAVideo,
+    getVideoById,
+    updateVideo,
+    deleteVideo,
     togglePublishStatus
 } from "../controllers/video.controller.js";
 
@@ -23,11 +26,10 @@ router
         publishAVideo
     );
 
-// ✅ Uncomment when ready to use
-// router.route("/:videoId")
-//     .get(getVideoById)
-//     .put(updateVideo)
-//     .delete(deleteVideo);
+router.route("/:videoId")
+    .get(getVideoById)
+     .put(updateVideo)
+     .delete(deleteVideo);
 
 router.route("/toggle/publish/:videoId").patch(togglePublishStatus);
 
