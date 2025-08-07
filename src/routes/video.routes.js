@@ -9,7 +9,7 @@ import {
 } from "../controllers/video.controller.js";
 
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { upload } from "../middlewares/multer.middleware.js";
+import { upload } from "../middlewares/multer.middleware.js";       // this upload is imported from multer it is used in router for uploding files
 
 const router = Router();
 
@@ -28,8 +28,11 @@ router
 
 router.route("/:videoId")
     .get(getVideoById)
-     .put(updateVideo)
-     .delete(deleteVideo);
+    .put(
+        upload.single("thumbnail"),
+        updateVideo
+    )
+    .delete(deleteVideo);
 
 router.route("/toggle/publish/:videoId").patch(togglePublishStatus);
 
